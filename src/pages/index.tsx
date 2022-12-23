@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bar } from 'react-chartjs-2';
+import { Bar, Doughnut, Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 interface IOccuranceFrequency {
@@ -41,6 +41,7 @@ export default function PrivatePage() {
         setWarnCount(data.levelInfo.warnCount);
 
         setlevelCountsByTimestamp(data.occuranceFrequency.levelCountsByTimestamp);
+        console.log(levelCountsByTimestamp)
 
         const timestamps = [
           new Set([
@@ -108,6 +109,49 @@ export default function PrivatePage() {
       }
     ]
   };
+
+  const donutData = {
+    labels: [
+      'ERROR',
+      'INFO',
+      'WARN'
+    ],
+    datasets: [{
+      data: [errorCount, infoCount, warnCount],
+      backgroundColor: [
+      '#FF6384',
+      '#36A2EB',
+      '#FFCE56'
+      ],
+      hoverBackgroundColor: [
+      '#FF6384',
+      '#36A2EB',
+      '#FFCE56'
+      ]
+    }]
+  };
+
+  const pieData = {
+    labels: [
+      'ERROR',
+      'INFO',
+      'WARN'
+    ],
+    datasets: [{
+      data: [errorCount, infoCount, warnCount],
+      backgroundColor: [
+      '#FF6384',
+      '#36A2EB',
+      '#FFCE56'
+      ],
+      hoverBackgroundColor: [
+      '#FF6384',
+      '#36A2EB',
+      '#FFCE56'
+      ]
+    }]
+  };
+  
   
   return (
     <div>
@@ -128,9 +172,15 @@ export default function PrivatePage() {
           data={levelCountData}
         />
         <h2>Level Counts By Timestamp Bar</h2>
-        <Bar
+        {/* <Bar
           data={levelCountsByTimestampData} 
           // options={levelCountsByTimestampOptions}
+        /> */}
+        <Doughnut
+			    data={donutData}
+		    />
+        <Pie
+          data={pieData}
         />
       </div>
     </div>
