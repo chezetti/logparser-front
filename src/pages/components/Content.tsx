@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bar, Doughnut, Pie } from 'react-chartjs-2';
 import styles from "../../../styles/Home.module.css";
 import 'chart.js/auto';
@@ -16,6 +16,9 @@ export default function PrivatePage() {
     const [infoCount, setInfoCount] = useState(0);
     const [warnCount, setWarnCount] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
+
+    const [shouldHide, setShouldHide] = useState(true);
+
     const [levelCountsByTimestamp, setlevelCountsByTimestamp] = useState<IOccuranceFrequency>({});
     const [levelCountsByTimestampData, setlevelCountsByTimestampData] = useState({});
 
@@ -43,7 +46,7 @@ export default function PrivatePage() {
                 setInfoCount(data.logLevelInfo.INFO);
                 setWarnCount(data.logLevelInfo.WARN);
                 setTotalCount(data.logLevelInfo.TOTAL);
-
+                setShouldHide(false);
                 setlevelCountsByTimestamp(data.occuranceFrequency.levelCountsByTimestamp);
 
                 // const timestamps = [
@@ -177,7 +180,7 @@ export default function PrivatePage() {
                         </div>
                     </div>
 
-                    <div className="row row-cols-1 mt-3">
+                    <div className={shouldHide ? 'd-none' : 'row row-cols-1 mt-3'}>
                         <div className="col">
                             <p className="fs-3">Errors: {errorCount}</p>
                         </div>
@@ -192,7 +195,7 @@ export default function PrivatePage() {
                         </div>
                     </div>
                 </div>
-                <div className="container">
+                <div className={shouldHide ? 'd-none' : 'container'}>
                     <div className="row justify-content-between">
                         <div className="col-lg-5 col-12 text-center mb-5">
                             <h2>Log Level Count Bar</h2>
