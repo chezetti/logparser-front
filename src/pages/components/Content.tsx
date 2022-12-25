@@ -272,14 +272,14 @@ export default function PrivatePage() {
                 <div className={shouldHide ? 'd-none' : 'container'}>
                     <div className="row justify-content-between">
                         <div className="col-lg-5 col-12 text-center mb-5">
-                            <h2>Log Math Expectation</h2>
-                            <Line
-                            //TODO
-                            //@ts-ignore
-                                data={logLevelExpectation}
-                                width={100}
-                                height={100}
-                            />
+                        <h2>Log Math Expectation</h2>
+                         <Line
+                        //TODO
+                        //@ts-ignore
+                            data={logLevelExpectation}
+                            width={100}
+                            height={100}
+                        />
                         </div>
                         <Line
                         //TODO
