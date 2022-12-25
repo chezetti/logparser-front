@@ -12,6 +12,9 @@ export default function PrivatePage() {
     const [infoCount, setInfoCount] = useState(0);
     const [warnCount, setWarnCount] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
+    const [logLevelExpectationError, setlogLevelExpectationError] = useState(0);
+    const [logLevelExpectationInfo, setlogLevelExpectationInfo] = useState(0);
+    const [logLevelExpectationWarn, setlogLevelExpectationWarn] = useState(0);
 
     const [shouldHide, setShouldHide] = useState(true);
 
@@ -43,6 +46,9 @@ export default function PrivatePage() {
                 setTotalCount(data.logLevelInfo.TOTAL);
                 setShouldHide(false);
                 setlevelCountsByTimestamp(data.occuranceFrequency.levelCountsByTimestamp);
+                setlogLevelExpectationError(data.logLevelExpectation.ERROR);
+                setlogLevelExpectationInfo(data.logLevelExpectation.INFO);
+                setlogLevelExpectationWarn(data.logLevelExpectation.WARN);
             })
             .catch(error => console.log('error', error));
     };
@@ -136,13 +142,36 @@ export default function PrivatePage() {
             ]
         };
     };
+  
+    const logLevelExpectation = {
+        labels: ['Errors', 'Infos', 'Warns'],
+        datasets: [
+            {
+                label: 'Level Count',
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: 'rgba(75,192,192,0.4)',
+                borderColor: 'rgba(75,192,192,1)',
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: 'rgba(75,192,192,1)',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                pointHoverBorderColor: 'rgba(220,220,220,1)',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: [logLevelExpectationError, logLevelExpectationInfo, logLevelExpectationWarn]
+            }
+        ]
+    };
 
-    const levelCountData = {
-        labels: [
-            'ERROR',
-            'INFO',
-            'WARN'
-        ],        
+    const logCountInfo = {
+        labels: ['Errors', 'Infos', 'Warns'],
         datasets: [
             {
                 label: 'Level Count',
@@ -192,13 +221,13 @@ export default function PrivatePage() {
         datasets: [{
             data: [errorCount, infoCount, warnCount],
             backgroundColor: [
-                '#FF6384',
-                '#36A2EB',
+                '#FF5678',
+                '#51B3FF',
                 '#FFCE56'
             ],
             hoverBackgroundColor: [
-                '#FF6384',
-                '#36A2EB',
+                '#FF5678',
+                '#51B3FF',
                 '#FFCE56'
             ]
         }]
@@ -225,7 +254,6 @@ export default function PrivatePage() {
                             </button>
                         </div>
                     </div>
-
                     <div className={shouldHide ? 'd-none' : 'row row-cols-1 mt-3'}>
                         <div className="col">
                             <p className="fs-3">Errors: {errorCount}</p>
@@ -244,9 +272,11 @@ export default function PrivatePage() {
                 <div className={shouldHide ? 'd-none' : 'container'}>
                     <div className="row justify-content-between">
                         <div className="col-lg-5 col-12 text-center mb-5">
-                            <h2>Log Level Count Bar</h2>
-                            <Bar
-                                data={levelCountData}
+                            <h2>Log Math Expectation</h2>
+                            <Line
+                            //TODO
+                            //@ts-ignore
+                                data={logLevelExpectation}
                                 width={100}
                                 height={100}
                             />
@@ -257,7 +287,15 @@ export default function PrivatePage() {
                             data={levelCountsByTimestampData()} 
                         />
                         <div className="col-lg-5 col-12 text-center mb-5">
-                            <h2>Level Counts By Timestamp Bar</h2>
+                            <h2>Log Info</h2>
+                            <Bar
+                                data={logCountInfo}
+                                width={100}
+                                height={100}
+                            />
+                        </div>
+                        <div className="col-lg-5 col-12 text-center mb-5">
+                            <h2>Log Info</h2>
                             <Doughnut
                                 data={donutData}
                                 width={100}
@@ -265,6 +303,7 @@ export default function PrivatePage() {
                             />
                         </div>
                         <div className="col-lg-5 col-12 text-center mb-5">
+                            <h2>Log Info</h2>
                             <Pie
                                 data={pieData}
                                 width={100}
