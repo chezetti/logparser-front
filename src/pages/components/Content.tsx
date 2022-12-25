@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Bar, Doughnut, Pie } from 'react-chartjs-2';
 import styles from "../../../styles/Home.module.css";
 import 'chart.js/auto';
+import { IParsedLog } from "./interfaces/parsed-log.interface";
 
 interface IOccuranceFrequency {
     [level: string]: {
@@ -14,6 +15,7 @@ export default function PrivatePage() {
     const [errorCount, setErrorCount] = useState(0);
     const [infoCount, setInfoCount] = useState(0);
     const [warnCount, setWarnCount] = useState(0);
+    const [totalCount, setTotalCount] = useState(0);
     const [levelCountsByTimestamp, setlevelCountsByTimestamp] = useState<IOccuranceFrequency>({});
     const [levelCountsByTimestampData, setlevelCountsByTimestampData] = useState({});
 
@@ -36,56 +38,56 @@ export default function PrivatePage() {
 
         fetch("http://localhost:9000/parser", requestOptions)
             .then(response => response.json())
-            .then((data) => {
-                setErrorCount(data.levelInfo.errorCount);
-                setInfoCount(data.levelInfo.infoCount);
-                setWarnCount(data.levelInfo.warnCount);
+            .then((data: IParsedLog) => {
+                setErrorCount(data.logLevelInfo.ERROR);
+                setInfoCount(data.logLevelInfo.INFO);
+                setWarnCount(data.logLevelInfo.WARN);
+                setTotalCount(data.logLevelInfo.TOTAL);
 
                 setlevelCountsByTimestamp(data.occuranceFrequency.levelCountsByTimestamp);
-                console.log(levelCountsByTimestamp)
 
-                const timestamps = [
-                    new Set([
-                        ...Object.keys(levelCountsByTimestamp.INFO),
-                        ...Object.keys(levelCountsByTimestamp.ERROR),
-                        ...Object.keys(levelCountsByTimestamp.WARN),
-                    ]),
-                ];
+                // const timestamps = [
+                //     new Set([
+                //         ...Object.keys(levelCountsByTimestamp.INFO),
+                //         ...Object.keys(levelCountsByTimestamp.ERROR),
+                //         ...Object.keys(levelCountsByTimestamp.WARN),
+                //     ]),
+                // ];
 
 
-                const levelCountsByTimestampData = {
-                    labels: timestamps,
-                    datasets: [
-                        {
-                            label: 'INFO',
-                            data: [...Object.values(levelCountsByTimestamp.INFO)],
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            pointBackgroundColor: 'rgba(255, 99, 132, 1)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
-                        },
-                        {
-                            label: 'ERROR',
-                            data: [...Object.values(levelCountsByTimestamp.ERROR)],
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
-                        },
-                        {
-                            label: 'WARNING',
-                            data: [...Object.values(levelCountsByTimestamp.INFO)],
-                            borderColor: 'rgba(255, 206, 86, 1)',
-                            pointBackgroundColor: 'rgba(255, 206, 86, 1)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(255, 206, 86, 1)',
-                        },
-                    ],
-                };
-                setlevelCountsByTimestampData(levelCountsByTimestampData);
+                // const levelCountsByTimestampData = {
+                //     labels: timestamps,
+                //     datasets: [
+                //         {
+                //             label: 'INFO',
+                //             data: [...Object.values(levelCountsByTimestamp.INFO)],
+                //             borderColor: 'rgba(255, 99, 132, 1)',
+                //             pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                //             pointBorderColor: '#fff',
+                //             pointHoverBackgroundColor: '#fff',
+                //             pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
+                //         },
+                //         {
+                //             label: 'ERROR',
+                //             data: [...Object.values(levelCountsByTimestamp.ERROR)],
+                //             borderColor: 'rgba(54, 162, 235, 1)',
+                //             pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                //             pointBorderColor: '#fff',
+                //             pointHoverBackgroundColor: '#fff',
+                //             pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+                //         },
+                //         {
+                //             label: 'WARNING',
+                //             data: [...Object.values(levelCountsByTimestamp.INFO)],
+                //             borderColor: 'rgba(255, 206, 86, 1)',
+                //             pointBackgroundColor: 'rgba(255, 206, 86, 1)',
+                //             pointBorderColor: '#fff',
+                //             pointHoverBackgroundColor: '#fff',
+                //             pointHoverBorderColor: 'rgba(255, 206, 86, 1)',
+                //         },
+                //     ],
+                // };
+                // setlevelCountsByTimestampData(levelCountsByTimestampData);
             })
             .catch(error => console.log('error', error));
     };
@@ -184,6 +186,9 @@ export default function PrivatePage() {
                         </div>
                         <div className="col">
                             <p className="fs-3">Warns: {warnCount}</p>
+                        </div>
+                        <div className="col">
+                            <p className="fs-3">Total: {totalCount}</p>
                         </div>
                     </div>
                 </div>
