@@ -156,33 +156,37 @@ export default function PrivatePage() {
 
     return (
         <div>
-            <div className="ms-5">
-                <h2>Select File</h2>
-                <div className="d-flex">
-                    <div className="col-4">
-                        <input className="form-control" type="file" id="formFile" onChange={uploadToClient} />
+            <div className="">
+                <div className="container-fluid ms-4 mt-4">
+                    <h1 className="justify-content-center d-flex">Ontleder</h1>
+                    <h2>Select File</h2>
+                    <div className="row">
+                        <div className="col-lg-4 col-11">
+                            <input className="form-control" type="file" id="formFile" onChange={uploadToClient} />
+                        </div>
+                        <div className="col-lg-2 mt-3 mt-lg-0">
+                            <button
+                                type="button"
+                                className="btn btn-success ms-lg-3 col-5"
+                                onClick={uploadToServer}
+                            >
+                                Parse
+                            </button>
+                        </div>
                     </div>
-                    <button
-                        className="btn btn-primary"
-                        type="submit"
-                        onClick={uploadToServer}
-                    >
-                        Parse
-                    </button>
-                </div>
-                <p></p>
-                <div className="row row-cols-1">
-                    <div className="col">
-                        <p className="fs-3">Errors: {errorCount}</p>
-                    </div>
-                    <div className="col">
-                        <p className="fs-3">Infos: {infoCount}</p>
-                    </div>
-                    <div className="col">
-                        <p className="fs-3">Warns: {warnCount}</p>
-                    </div>
-                </div>
 
+                    <div className="row row-cols-1 mt-3">
+                        <div className="col">
+                            <p className="fs-3">Errors: {errorCount}</p>
+                        </div>
+                        <div className="col">
+                            <p className="fs-3">Infos: {infoCount}</p>
+                        </div>
+                        <div className="col">
+                            <p className="fs-3">Warns: {warnCount}</p>
+                        </div>
+                    </div>
+                </div>
                 <div className="container">
                     <div className="row justify-content-between">
                         <div className="col-lg-5 col-12 text-center mb-5">
