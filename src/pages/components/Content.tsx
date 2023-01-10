@@ -9,7 +9,7 @@ import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
 
 export default function PrivatePage() {
     const [file, setFile] = useState(null);
-    const [range, setRange] = useState("");
+    const [range, setRange] = useState("0-0");
     const [errorCount, setErrorCount] = useState(0);
     const [infoCount, setInfoCount] = useState(0);
     const [warnCount, setWarnCount] = useState(0);
