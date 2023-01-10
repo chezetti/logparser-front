@@ -39,7 +39,7 @@ export default function PrivatePage() {
             body: formData,
         };
 
-        fetch(`${APP.BACKEND_URL}/parser`, requestOptions)
+        fetch(`${APP.BACKEND_URL}/parser/${range}`, requestOptions)
             .then(response => response.json())
             .then((data: IParsedLog) => {
                 setErrorCount(data.logLevelInfo.ERROR);
@@ -248,13 +248,13 @@ export default function PrivatePage() {
                         <div className="col-lg-2 mt-3 mt-lg-0">
 
                             <Dropdown as={ButtonGroup}>
-                                <Button variant="success" onClick={uploadToServer}>Parser</Button>
+                                <Button variant="success" onClick={uploadToServer}>Parse</Button>
                                 <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
                                 <Dropdown.Menu>
                                     <Dropdown.Item href="#/action-1" onClick={() => setRange("0-0")}>From all day</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2" onClick={() => setRange("8-12")}>From 8 am to 12 pm</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3" onClick={() => setRange("12-4")}>From 12 pm to 4 pm</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-4" onClick={() => setRange("4-8")}>From 4 pm to 8 pm</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-2" onClick={() => setRange("8-12")}>From 8 am to 12 am</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-3" onClick={() => setRange("12-16")}>From 12 am to 4 pm</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-4" onClick={() => setRange("16-20")}>From 4 pm to 8 pm</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                             
