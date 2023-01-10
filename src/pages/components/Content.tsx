@@ -5,9 +5,11 @@ import 'chart.js/auto';
 import { IParsedLog } from "./interfaces/parsed-log.interface";
 import { IOccuranceFrequency } from "./interfaces/occurance-frequency.interface";
 import { APP } from "../../config/app.config";
+import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
 
 export default function PrivatePage() {
     const [file, setFile] = useState(null);
+    const [range, setRange] = useState("");
     const [errorCount, setErrorCount] = useState(0);
     const [infoCount, setInfoCount] = useState(0);
     const [warnCount, setWarnCount] = useState(0);
@@ -66,7 +68,7 @@ export default function PrivatePage() {
         }
 
         return [];
-    }; 
+    };
 
 
     const levelCountsByTimestampData = () => {
@@ -116,13 +118,13 @@ export default function PrivatePage() {
                 ],
             }
         }
-        
+
         return {
             labels: [
                 'ERROR',
                 'INFO',
                 'WARN'
-            ],        
+            ],
             datasets: [
                 {
                     label: 'Level Count',
@@ -142,7 +144,7 @@ export default function PrivatePage() {
             ]
         };
     };
-  
+
     const logLevelExpectation = {
         labels: ['Errors', 'Infos', 'Warns'],
         datasets: [
@@ -233,7 +235,6 @@ export default function PrivatePage() {
         }]
     };
 
-
     return (
         <div>
             <div className="">
@@ -245,13 +246,18 @@ export default function PrivatePage() {
                             <input className="form-control" type="file" id="formFile" onChange={uploadToClient} />
                         </div>
                         <div className="col-lg-2 mt-3 mt-lg-0">
-                            <button
-                                type="button"
-                                className="btn btn-success ms-lg-3 col-5"
-                                onClick={uploadToServer}
-                            >
-                                Parse
-                            </button>
+
+                            <Dropdown as={ButtonGroup}>
+                                <Button variant="success" onClick={uploadToServer}>Parser</Button>
+                                <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+                                <Dropdown.Menu>
+                                    <Dropdown.Item href="#/action-1" onClick={() => setRange("0-0")}>From all day</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-2" onClick={() => setRange("8-12")}>From 8 am to 12 pm</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-3" onClick={() => setRange("12-4")}>From 12 pm to 4 pm</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-4" onClick={() => setRange("4-8")}>From 4 pm to 8 pm</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            
                         </div>
                     </div>
                     <div className={shouldHide ? 'd-none' : 'row row-cols-1 mt-3'}>
@@ -272,19 +278,19 @@ export default function PrivatePage() {
                 <div className={shouldHide ? 'd-none' : 'container'}>
                     <div className="row justify-content-between">
                         <div className="col-lg-5 col-12 text-center mb-5">
-                        <h2>Log Math Expectation</h2>
-                         <Line
-                        //TODO
-                        //@ts-ignore
-                            data={logLevelExpectation}
-                            width={100}
-                            height={100}
-                        />
+                            <h2>Log Math Expectation</h2>
+                            <Line
+                                //TODO
+                                //@ts-ignore
+                                data={logLevelExpectation}
+                                width={100}
+                                height={100}
+                            />
                         </div>
                         <Line
-                        //TODO
-                        //@ts-ignore
-                            data={levelCountsByTimestampData()} 
+                            //TODO
+                            //@ts-ignore
+                            data={levelCountsByTimestampData()}
                         />
                         <div className="col-lg-5 col-12 text-center mb-5">
                             <h2>Log Info</h2>
