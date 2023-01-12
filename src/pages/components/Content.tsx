@@ -59,11 +59,26 @@ export default function PrivatePage() {
 
     const timestamps = () => {
         if (Object.keys(levelCountsByTimestamp).length != 0) {
-            console.log(Object.keys(levelCountsByTimestamp).length);
-            console.log(errorList);
+            // console.log(Object.keys(levelCountsByTimestamp).length);
+            // console.log(errorList);
             return [
                 new Set([
                     ...Object.keys(levelCountsByTimestamp.INFO || {}),
+                    ...Object.keys(levelCountsByTimestamp.ERROR || {}),
+                    ...Object.keys(levelCountsByTimestamp.WARN || {}),
+                ]),
+            ];
+        }
+
+        return [];
+    };
+
+    const timestamps2 = () => {
+        if (Object.keys(levelCountsByTimestamp).length != 0) {
+            // console.log(Object.keys(levelCountsByTimestamp).length);
+            // console.log(errorList);
+            return [
+                new Set([
                     ...Object.keys(levelCountsByTimestamp.ERROR || {}),
                     ...Object.keys(levelCountsByTimestamp.WARN || {}),
                 ]),
@@ -149,17 +164,68 @@ export default function PrivatePage() {
         };
     };
 
+    const levelCountsByTimestampData2 = () => {
+        if (Object.keys(levelCountsByTimestamp).length != 0) {
+            return {
+                labels: Array.from(timestamps2()[0]).sort(),
+                datasets: [
+                    {
+                        label: 'ERROR',
+                        data: [...Object.values(levelCountsByTimestamp.ERROR || {})],
+                        borderColor: 'rgba(0, 0, 255, 1)', // blue
+                        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointBorderColor: '#red',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
+                    },
+                    {
+                        label: 'WARN',
+                        data: [...Object.values(levelCountsByTimestamp.WARN || {})],
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        pointBackgroundColor: 'rgba(255, 206, 86, 1)',
+                        pointBorderColor: 'yellow',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(255, 206, 86, 1)',
+                        fill: false,
+                        lineTension: 0.1,
+                        backgroundColor: 'rgba(75,192,192,0.4)',
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        borderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 5,
+                        pointHoverBorderWidth: 2,
+                        pointRadius: 1,
+                        pointHitRadius: 10,
+                    },
+                ],
+            }
+        }
 
-    const Apps = () => {
-        Object.entries(errorList).map(([key, value]) => {
-            console.log(value)
-            return (
-                <>
-                    <h1>{key}</h1>
-                    {/* <h1>{value}</h1> */}
-                </>
-            )
-        })
+        return {
+            labels: [
+                'ERROR',
+                'WARN'
+            ],
+            datasets: [
+                {
+                    label: 'Level Count',
+                    data: [errorCount, warnCount],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        };
     };
 
     const logLevelExpectation = {
@@ -336,6 +402,11 @@ export default function PrivatePage() {
                             //TODO
                             //@ts-ignore
                             data={levelCountsByTimestampData()}
+                        />
+                        <Line
+                            //TODO
+                            //@ts-ignore
+                            data={levelCountsByTimestampData2()}
                         />
                         <div className="col-lg-5 col-12 text-center mb-5">
                             <h2>Log Info</h2>
