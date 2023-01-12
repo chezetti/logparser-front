@@ -296,12 +296,12 @@ export default function PrivatePage() {
                     
                     <div className={shouldHide ? 'd-none' : 'errorContainer mb-5'} id="accordionPanelsStayOpenExample">
                     <h2>Ошибки:</h2>
-                        <Accordion>
+                        <Accordion alwaysOpen>
                             {
                                 Object.entries(errorList).map(([key, value], index) => {
                                     console.log(index)
                                     return (
-                                        <Accordion.Item key={index} eventKey={index}>
+                                        <Accordion.Item key={index} eventKey={index.toString()}>
                                             <Accordion.Header> <div className="">{key}</div></Accordion.Header>
                                             {
                                                 Object.entries(value).map(([key, value], index) => {
