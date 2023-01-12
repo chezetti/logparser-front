@@ -255,7 +255,9 @@ export default function PrivatePage() {
     return (
         <div>
             <div className="">
-                <div className="container-fluid ms-4 mt-4">
+                <div className="container-fluid">
+                <div className="ms-4 mt-4">
+                 
                     <h1 className="justify-content-center d-flex">Ontleder</h1>
                     <h2>Select File</h2>
                     <div className="row">
@@ -361,6 +363,7 @@ export default function PrivatePage() {
                         </div>
                     </div>
                 </div>
+                </div>   
             </div>
         </div>
     );
