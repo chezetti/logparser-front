@@ -5,7 +5,7 @@ import 'chart.js/auto';
 import { IParsedLog } from "./interfaces/parsed-log.interface";
 import { IOccuranceFrequency } from "./interfaces/occurance-frequency.interface";
 import { APP } from "../../config/app.config";
-import { Button, ButtonGroup, Dropdown } from "react-bootstrap";
+import { Button, ButtonGroup, Dropdown, Accordion } from "react-bootstrap";
 
 export default function PrivatePage() {
     const [file, setFile] = useState(null);
@@ -21,6 +21,7 @@ export default function PrivatePage() {
     const [shouldHide, setShouldHide] = useState(true);
 
     const [levelCountsByTimestamp, setlevelCountsByTimestamp] = useState<IOccuranceFrequency>({});
+    const [errorList, setErrorList] = useState<IOccuranceFrequency>({});
 
     const uploadToClient = (event: any) => {
         if (event.target.files && event.target.files[0]) {
@@ -48,6 +49,7 @@ export default function PrivatePage() {
                 setTotalCount(data.logLevelInfo.TOTAL);
                 setShouldHide(false);
                 setlevelCountsByTimestamp(data.occuranceFrequency.levelCountsByTimestamp);
+                setErrorList(data.occuranceFrequency.errorClassNameCountsByMessage);
                 setlogLevelExpectationError(data.logLevelExpectation.ERROR);
                 setlogLevelExpectationInfo(data.logLevelExpectation.INFO);
                 setlogLevelExpectationWarn(data.logLevelExpectation.WARN);
@@ -58,11 +60,12 @@ export default function PrivatePage() {
     const timestamps = () => {
         if (Object.keys(levelCountsByTimestamp).length != 0) {
             console.log(Object.keys(levelCountsByTimestamp).length);
+            console.log(errorList);
             return [
                 new Set([
-                    ...Object.keys(levelCountsByTimestamp.INFO),
-                    ...Object.keys(levelCountsByTimestamp.ERROR),
-                    ...Object.keys(levelCountsByTimestamp.WARN),
+                    ...Object.keys(levelCountsByTimestamp.INFO || {}),
+                    ...Object.keys(levelCountsByTimestamp.ERROR || {}),
+                    ...Object.keys(levelCountsByTimestamp.WARN || {}),
                 ]),
             ];
         }
@@ -73,12 +76,13 @@ export default function PrivatePage() {
 
     const levelCountsByTimestampData = () => {
         if (Object.keys(levelCountsByTimestamp).length != 0) {
+            console.log(timestamps()[0])
             return {
                 labels: Array.from(timestamps()[0]).sort(),
                 datasets: [
                     {
                         label: 'INFO',
-                        data: [...Object.values(levelCountsByTimestamp.INFO)],
+                        data: [...Object.values(levelCountsByTimestamp.INFO || {})],
                         borderColor: 'rgba(255, 99, 132, 1)',
                         pointBackgroundColor: 'rgba(255, 99, 132, 1)',
                         pointBorderColor: 'blue',
@@ -87,7 +91,7 @@ export default function PrivatePage() {
                     },
                     {
                         label: 'ERROR',
-                        data: [...Object.values(levelCountsByTimestamp.ERROR)],
+                        data: [...Object.values(levelCountsByTimestamp.ERROR || {})],
                         borderColor: 'rgba(0, 0, 255, 1)', // blue
                         pointBackgroundColor: 'rgba(255, 99, 132, 1)',
                         pointBorderColor: '#red',
@@ -96,7 +100,7 @@ export default function PrivatePage() {
                     },
                     {
                         label: 'WARN',
-                        data: [...Object.values(levelCountsByTimestamp.WARN)],
+                        data: [...Object.values(levelCountsByTimestamp.WARN || {})],
                         borderColor: 'rgba(255, 206, 86, 1)',
                         pointBackgroundColor: 'rgba(255, 206, 86, 1)',
                         pointBorderColor: 'yellow',
@@ -143,6 +147,19 @@ export default function PrivatePage() {
                 }
             ]
         };
+    };
+
+
+    const Apps = () => {
+        Object.entries(errorList).map(([key, value]) => {
+            console.log(value)
+            return (
+                <>
+                    <h1>{key}</h1>
+                    {/* <h1>{value}</h1> */}
+                </>
+            )
+        })
     };
 
     const logLevelExpectation = {
@@ -257,7 +274,7 @@ export default function PrivatePage() {
                                     <Dropdown.Item href="#/action-4" onClick={() => setRange("16-20")}>From 4 pm to 8 pm</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            
+
                         </div>
                     </div>
                     <div className={shouldHide ? 'd-none' : 'row row-cols-1 mt-3'}>
@@ -273,6 +290,32 @@ export default function PrivatePage() {
                         <div className="col">
                             <p className="fs-3">Total: {totalCount}</p>
                         </div>
+                    </div>
+                    
+                    <div className={shouldHide ? 'd-none' : 'errorContainer mb-5'} id="accordionPanelsStayOpenExample">
+                    <h2>Ошибки:</h2>
+                        <Accordion>
+                            {
+                                Object.entries(errorList).map(([key, value], index) => {
+                                    console.log(index)
+                                    return (
+                                        <Accordion.Item key={index} eventKey={index}>
+                                            <Accordion.Header> <div className="">{key}</div></Accordion.Header>
+                                            {
+                                                Object.entries(value).map(([key, value], index) => {
+                                                    console.log(value)
+                                                    return (
+                                                        <Accordion.Body className="col-11" key={index}>
+                                                            <h5 className="text-danger col-11">{key} - {value}</h5> 
+                                                        </Accordion.Body>
+                                                    )
+                                                })
+                                            }
+                                        </Accordion.Item>
+                                    )
+                                })
+                            }
+                        </Accordion>
                     </div>
                 </div>
                 <div className={shouldHide ? 'd-none' : 'container'}>
